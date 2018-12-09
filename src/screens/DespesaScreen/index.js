@@ -70,4 +70,4 @@ class DespesaScreen extends Component {
     }
 }
 
-export default InfoPage
+export default DespesaScreen
