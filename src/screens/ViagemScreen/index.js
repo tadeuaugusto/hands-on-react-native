@@ -18,22 +18,24 @@ class ViagemScreen extends Component {
         this.loadData();
     }
 
-    // recupera as viagens do async storage
+    // recupera as viagens do async storage e salva no state
     loadData = async() => {
         const viagensStorage = await AsyncStorage.getItem('trips');
         console.log('[ViagemScreen] viagensStorage (ANTES): ', viagensStorage);
+        console.log('[ViagemScreen] viagensStorage.length (ANTES): ', viagensStorage.length);
 
         let viagens = [];
         if (viagensStorage) {
             viagens = JSON.parse(viagensStorage);
         }
-        this.setState({ viagens: viagens });
-        console.log('[ViagemScreen] viagensStorage (DEPOIS): ', viagensStorage);
 
+        this.setState({ viagens: viagens });
+        console.log('[ViagemScreen] state.viagens (DEPOIS): ', this.state.viagens);
+        console.log('[ViagemScreen] state.viagens.length (DEPOIS): ', this.state.viagens.length);
     }
 
     renderItem = viagem => {
-        console.log('viagem: ', viagem);
+        // console.log('viagem: ', viagem);
         return <Viagem onPress={() => this.props.navigation.navigate('DespesaScreen', {
             viagem: viagem.item
         })} title={ viagem.item.viagem } thumbnail={ viagem.item.thumbnail }
@@ -70,7 +72,7 @@ class ViagemScreen extends Component {
                         }}
                     />
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('CadastrarViagem')}
+                        onPress={() => this.props.navigation.navigate('CadastrarViagem', { refresh: this.loadData })}
                         style={{
                             position: 'absolute',
                             bottom: 0,

@@ -51,7 +51,9 @@ class CadastrarViagem extends Component {
         await AsyncStorage.setItem('trips', JSON.stringify(viagens))
         console.log('[CadastrarViagem] viagens (DEPOIS): ', viagens);
 
-        this.props.navigation.navigate('CadastrarDespesa', {id: viagem.id});
+        // this.props.navigation.navigate('CadastrarDespesa', {id: viagem.id});
+        this.props.navigation.state.params.refresh();
+        this.props.navigation.goBack();
     }
 
     render() {
