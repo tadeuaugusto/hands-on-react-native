@@ -29,7 +29,7 @@ class CadastrarViagem extends Component {
         );
     }
 
-    handleSalvarViagem = async() => {
+    handleSave = async() => {
         const viagem = {
             id: new Date().getTime(),
             viagem: this.state.viagem,
@@ -37,14 +37,19 @@ class CadastrarViagem extends Component {
             latitude: 0,
             longitute: 0
         }
-        const viagensStorage = await AsyncStorage.getItem('trips')
-        let viagens = []
+
+        // recupera as viagens do async storage
+        const viagensStorage = await AsyncStorage.getItem('trips');
+        console.log('[CadastrarViagem] viagensStorage (ANTES): ', viagensStorage);
+
+        let viagens = [];
         if (viagensStorage) { // handle null, undefined, 0, etc.. (falsy)
             viagens = JSON.parse(viagensStorage)
         }
-        viagens.push(viagem)
+
+        viagens.push(viagem);
         await AsyncStorage.setItem('trips', JSON.stringify(viagens))
-        console.log('trips =>', viagens);
+        console.log('[CadastrarViagem] viagens (DEPOIS): ', viagens);
 
         this.props.navigation.navigate('CadastrarDespesa', {id: viagem.id});
     }
@@ -74,7 +79,7 @@ class CadastrarViagem extends Component {
                 />
                 <Text>{JSON.stringify(this.state)}</Text>
 
-                <TouchableOpacity style={styles.btn} onPress={ this.handleSalvarViagem }>
+                <TouchableOpacity style={styles.btn} onPress={ this.handleSave }>
                     <Text>Salvar Viagem</Text>
                 </TouchableOpacity>
             </View>

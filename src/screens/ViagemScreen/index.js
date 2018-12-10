@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 import Viagem from './Viagem';
 import { FlatList } from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
@@ -10,22 +10,47 @@ class ViagemScreen extends Component {
         header: null
     }
 
+    state = {
+        viagens: []
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+
+    // recupera as viagens do async storage
+    loadData = async() => {
+        const viagensStorage = await AsyncStorage.getItem('trips');
+        console.log('[ViagemScreen] viagensStorage (ANTES): ', viagensStorage);
+
+        let viagens = [];
+        if (viagensStorage) {
+            viagens = JSON.parse(viagensStorage);
+        }
+        this.setState({ viagens: viagens });
+        console.log('[ViagemScreen] viagensStorage (DEPOIS): ', viagensStorage);
+
+    }
+
     renderItem = viagem => {
         console.log('viagem: ', viagem);
         return <Viagem onPress={() => this.props.navigation.navigate('DespesaScreen', {
             viagem: viagem.item
-        })} title={ viagem.item.name } thumbnail={ viagem.item.thumbnail }
+        })} title={ viagem.item.viagem } thumbnail={ viagem.item.thumbnail }
         />
     }
 
     render() {
-        const viagens = [
-            { id: '1', name: 'Praga', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/LNKc5V3.jpg', price: 1000 },
-            { id: '2', name: 'Amsterdam', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/ZLY8rUI.jpg', price: 1000 },
-            { id: '3', name: 'Bruxelas', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/eyeCyYV.jpg', price: 1000 },
-            { id: '4', name: 'Leewardenn', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/ZLY8rUI.jpg', price: 1000 },
-            { id: '5', name: 'Cork', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/eyeCyYV.jpg', price: 1000 },
+        const { viagens } = this.state;
+        /*
+        [
+            { id: '1', viagem: 'Praga', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/LNKc5V3.jpg', price: 1000 },
+            { id: '2', viagem: 'Amsterdam', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/ZLY8rUI.jpg', price: 1000 },
+            { id: '3', viagem: 'Bruxelas', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/eyeCyYV.jpg', price: 1000 },
+            { id: '4', viagem: 'Leewardenn', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/ZLY8rUI.jpg', price: 1000 },
+            { id: '5', viagem: 'Cork', lat: '48.928258', lng: '16.120291', thumbnail: 'https://i.imgur.com/eyeCyYV.jpg', price: 1000 },
         ]
+        */
 
         return (
             <View style={{
@@ -55,13 +80,13 @@ class ViagemScreen extends Component {
                         <Image source={require('../../../assets/add-trip.png')} />
                     </TouchableOpacity>
                 </View>
-                <View style={{ backgroundColor: 'green' }}>
+                <View style={{ backgroundColor: 'white' }}>
                     <FlatList
                         data={viagens}
                         renderItem={this.renderItem}
                         horizontal
                         pagingEnabled
-                        keyExtractor={ item => item.id } />
+                        keyExtractor={ item => item.id.toString() } />
                 </View>
             </View>
         )

@@ -10,7 +10,7 @@ class DespesaScreen extends Component {
 
     renderItem = despesas => {
 
-        console.log(this.props.navigation.getParam('item', 'erro ao carregar item'));
+        console.log(this.props.navigation.getParam('item', '[DespesaScreen] erro ao carregar item'));
 
         return(
             <View style={styles.item}>

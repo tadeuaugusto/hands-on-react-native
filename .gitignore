@@ -56,3 +56,4 @@ buck-out/
 *.jsbundle
 
 constantes.js
+android/app/src/main/AndroidManifest.xml

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { Text, View, Image, TouchableOpacity, TextInput, AsyncStorage } from 'react-native';
 import styles from './styles';
 import MapView, { Marker } from 'react-native-maps';
 
@@ -36,10 +36,62 @@ class CadastrarDespesa extends Component {
         );
     }
 
+    handleSave = async() => {
+
+        // recebe o id da viagem
+        const id = '1544475667662'; // this.props.navigation.state.params.id;
+        console.log('[CadastrarDespesa] id viagem: ', id);
+
+        // recuperar as despesas salva para a viagem no async storage
+        const despesaStorage = await AsyncStorage.getItem('trip-'+id);
+        console.log('[CadastrarDespesa] despesaStorage (ANTES): ', despesaStorage);
+
+        let despesas = [];
+        if (despesaStorage) {
+            despesas = JSON.parse(despesaStorage);
+        }
+
+        // adiciona a nova despesa
+        despesas.push(this.state);
+        console.log('[CadastrarDespesa] despesas (DEPOIS): ', despesas);
+
+        // salva a nova lista de despesa no async storage
+        await AsyncStorage.setItem('trip-'+id, JSON.stringify(despesas));
+
+        // recupera as viagens do async storage
+        const viagensStorage = await AsyncStorage.getItem('trips');
+        console.log('[CadastrarDespesa] viagensStorage (ANTES): ', viagensStorage);
+
+        let viagens = [];
+        if (viagensStorage) {
+            viagens = JSON.parse(viagensStorage);
+        }
+
+        // calcula valor total
+        let total = 0;
+        despesas.forEach(p => {
+            total += p.price;
+        })
+        console.log('[CadastrarDespesa] total: ', total);
+
+        // atualiza o valor total (id)
+        viagens.forEach((trip, index) => {
+            if (viagens.id === id) {
+                viagens[index].price = total;
+                viagens[index].latitude = despesas[0].position.latitude;
+                viagens[index].longitude = despesas[0].position.longitude;
+            }
+        })
+
+        // salva as viagens no async storage
+        await AsyncStorage.setItem('trips', JSON.stringify(viagens));
+        console.log('[CadastrarDespesa] viagens (DEPOIS): ', viagens);
+    }
+
     render() {
 
-        console.log('id viagem: ', this.props.navigation.state);
 
+        /*
         const trip = {
             // // create endpoint /festivals/{id} (GET)
             name: 'Praga',
@@ -55,6 +107,7 @@ class CadastrarDespesa extends Component {
                 { id: '4', name: 'Aeroporto', description: 'Consumo dentro do aeroporto', price: 230}
             ]
         }
+        */
 
         return (
             <View style={{ flex: 1 }}>
@@ -81,10 +134,6 @@ class CadastrarDespesa extends Component {
                             <Image source={require('../../../assets/go-back-left-arrow.png')} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.tripName}>{ trip.name }</Text>
-                    <Text style={styles.tripPrice}>
-                        { trip.price }
-                    </Text>
                 </View>
 
                 <TextInput style={styles.input} placeholder='Nome' onChangeText={
@@ -94,11 +143,11 @@ class CadastrarDespesa extends Component {
                     txt => this.setState({ description: txt })}
                 />
                 <TextInput style={styles.input} placeholder='Preço' onChangeText={
-                    txt => this.setState({ price: txt })}
+                    txt => this.setState({ price: parseFloat(txt) })}
                 />
                 <Text>{JSON.stringify(this.state)}</Text>
 
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={ this.handleSave }>
                     <Text>Salvar Ponto</Text>
                 </TouchableOpacity>
             </View>
