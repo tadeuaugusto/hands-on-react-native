@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Viagem from './Viagem';
 import { FlatList } from 'react-native-gesture-handler';
+import MapView from 'react-native-maps';
 
 class ViagemScreen extends Component {
 
@@ -33,8 +34,26 @@ class ViagemScreen extends Component {
                 justifyContent: 'space-between',
                 alignItems: 'stretch'
             }}>
-                <View style={{ backgroundColor: 'red', flex: 1}}>
-                    <Text>Map</Text>
+                <View style={{ flex: 1}}>
+                    <MapView
+                        style={{ flex: 1 }}
+                        initialRegion={{
+                            latitude: 37.78825,
+                            longitude: -122.4324,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        }}
+                    />
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('CadastrarViagem')}
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 20,
+                            padding: 10 }}
+                    >
+                        <Image source={require('../../../assets/add-trip.png')} />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ backgroundColor: 'green' }}>
                     <FlatList

@@ -16,7 +16,7 @@ class DespesaScreen extends Component {
             <View style={styles.item}>
                 <View style={{ flex: 1 }}>
                     <Text style={styles.itemName}>{despesas.item.name}</Text>
-                    <Text>{despesas.item.genre}</Text>
+                    <Text>{despesas.item.description}</Text>
                 </View>
                 <View style={styles.wrapperItemPrice}>
                     <Text style={styles.itemPrice}>{ despesas.item.price }</Text>
