@@ -17,30 +17,22 @@ class DespesaScreen extends Component {
         this.loadData();
     }
 
-    // carrega viagens e despesas relacionadas
+    // load data from async storage
     loadData = async() => {
 
-        console.log("**************** ", this.props.navigation.state);
-        // const id = '1544480677870';
+        // id
         const id = this.props.navigation.state.params.id;
 
+        // trips
         const viagensStorage = await AsyncStorage.getItem('trips');
-        console.log('[DespesaScreen] viagensStorage (ANTES): ', viagensStorage);
-        console.log('[DespesaScreen] viagensStorage.length (ANTES): ', viagensStorage.length);
 
         let viagens = [];
         if (viagensStorage) {
             viagens = JSON.parse(viagensStorage);
         }
-        // this.setState({ viagens: viagens });
-        // console.log('[DespesaScreen] state.viagens (DEPOIS): ', this.state.viagens);
-        // console.log('[DespesaScreen] state.viagens.length (DEPOIS): ', this.state.viagens.length);
 
-
-
+        // points
         const despesaStorage = await AsyncStorage.getItem('trip-'+id);
-        console.log('[DespesaScreen] despesaStorage (ANTES): ', despesaStorage);
-        // console.log('[DespesaScreen] despesaStorage.length (ANTES): ', despesaStorage.length);
 
         let despesas = [];
         if (despesaStorage) {
@@ -60,18 +52,12 @@ class DespesaScreen extends Component {
             }
         })
 
-
         this.setState({ viagem: viagem, despesas: despesas });
-        console.log('[DespesaScreen] state.viagens (DEPOIS): ', this.state.viagem);
-        console.log('[DespesaScreen] state.viagens.length (DEPOIS): ', this.state.viagem.length);
-        console.log('[DespesaScreen] state.despesas (DEPOIS): ', this.state.despesas);
-        console.log('[DespesaScreen] state.despesas.length (DEPOIS): ', this.state.despesas.length);
-
+        console.log('[DespesaScreen] this.state.viagens: ', this.state.viagem);
+        console.log('[DespesaScreen] this.state.despesas: ', this.state.despesas);
     }
 
     renderItem = despesas => {
-
-        console.log(this.props.navigation.getParam('item', '[DespesaScreen] erro ao carregar item'));
 
         return(
             <View style={styles.item}>
@@ -107,10 +93,7 @@ class DespesaScreen extends Component {
         */
 
         const { despesas, viagem } = this.state;
-
         const id = this.props.navigation.state.params.id;
-
-        console.log("@@@@@@@@@@@@ ", viagem.price);
 
         return (
             <View style={{ flex: 1 }}>
@@ -126,7 +109,7 @@ class DespesaScreen extends Component {
                     </View>
                     <Text style={styles.tripName}>{ viagem.viagem }</Text>
                     <Text style={styles.tripPrice}>
-                        R$# { parseFloat(viagem.price).toFixed(2) }
+                        R$ { parseFloat(viagem.price).toFixed(2) }
                     </Text>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('CadastrarDespesa', {

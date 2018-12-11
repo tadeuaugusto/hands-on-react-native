@@ -22,8 +22,6 @@ class CadastrarDespesa extends Component {
 
     renderItem = despesas => {
 
-        console.log(this.props.navigation.getParam('item', 'erro ao carregar item'));
-
         return(
             <View style={styles.item}>
                 <View style={{ flex: 1 }}>
@@ -45,7 +43,6 @@ class CadastrarDespesa extends Component {
 
         // recuperar as despesas salva para a viagem no async storage
         const despesaStorage = await AsyncStorage.getItem('trip-'+id);
-        console.log('[CadastrarDespesa] despesaStorage (ANTES): ', despesaStorage);
 
         let despesas = [];
         if (despesaStorage) {
@@ -54,14 +51,12 @@ class CadastrarDespesa extends Component {
 
         // adiciona a nova despesa
         despesas.push(this.state);
-        console.log('[CadastrarDespesa] despesas (DEPOIS): ', despesas);
 
         // salva a nova lista de despesa no async storage
         await AsyncStorage.setItem('trip-'+id, JSON.stringify(despesas));
 
         // recupera as viagens do async storage
         const viagensStorage = await AsyncStorage.getItem('trips');
-        console.log('[CadastrarDespesa] viagensStorage (ANTES): ', viagensStorage);
 
         let viagens = [];
         if (viagensStorage) {
@@ -86,7 +81,7 @@ class CadastrarDespesa extends Component {
 
         // salva as viagens no async storage
         await AsyncStorage.setItem('trips', JSON.stringify(viagens));
-        console.log('[CadastrarDespesa] viagens (DEPOIS): ', viagens);
+        console.log('[CadastrarDespesa] saving trips.. (AsyncStorage): ', viagens);
 
 
         this.props.navigation.state.params.refresh();
@@ -94,7 +89,6 @@ class CadastrarDespesa extends Component {
     }
 
     render() {
-
 
         /*
         const trip = {

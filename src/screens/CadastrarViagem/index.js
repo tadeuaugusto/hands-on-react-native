@@ -14,8 +14,6 @@ class CadastrarViagem extends Component {
 
     renderItem = despesas => {
 
-        console.log(this.props.navigation.getParam('item', 'erro ao carregar item'));
-
         return(
             <View style={styles.item}>
                 <View style={{ flex: 1 }}>
@@ -38,41 +36,27 @@ class CadastrarViagem extends Component {
             longitute: 0
         }
 
-        // recupera as viagens do async storage
+        // getItem from async storage
         const viagensStorage = await AsyncStorage.getItem('trips');
-        console.log('[CadastrarViagem] viagensStorage (ANTES): ', viagensStorage);
 
         let viagens = [];
         if (viagensStorage) { // handle null, undefined, 0, etc.. (falsy)
             viagens = JSON.parse(viagensStorage)
         }
 
+        // push object
         viagens.push(viagem);
-        await AsyncStorage.setItem('trips', JSON.stringify(viagens))
-        console.log('[CadastrarViagem] viagens (DEPOIS): ', viagens);
 
-        // this.props.navigation.navigate('CadastrarDespesa', {id: viagem.id});
+        // setItem async storage
+        await AsyncStorage.setItem('trips', JSON.stringify(viagens))
+        console.log('[CadastrarViagem] saving trips.. (AsyncStorage): ', viagens);
+
+        // return and refresh the previous screen
         this.props.navigation.state.params.refresh();
         this.props.navigation.goBack();
     }
 
     render() {
-
-        const trip = {
-            // // create endpoint /festivals/{id} (GET)
-            name: 'Praga',
-            startDate: '28/05/2018 12:00',
-            endDate: '03/06/2019 18:00',
-            address: 'Czech Republic, CZ',
-            price: 'R$ 1000',
-            thumbnail: 'https://i.imgur.com/ZLY8rUI.jpg',
-            others: [ // despesas
-                { id: '1', name: 'Hostel', description: 'Pagamento reserva e diaria', price: 80},
-                { id: '2', name: 'Pub', description: 'Comida, bebida e etc', price: 570},
-                { id: '3', name: 'Aviao', description: 'Passagens aereas', price: 120},
-                { id: '4', name: 'Aeroporto', description: 'Consumo dentro do aeroporto', price: 230}
-            ]
-        }
 
         return (
             <View style={{ flex: 1, paddingTop: 120 }}>

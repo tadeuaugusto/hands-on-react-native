@@ -18,11 +18,9 @@ class ViagemScreen extends Component {
         this.loadData();
     }
 
-    // recupera as viagens do async storage e salva no state
+    // get data from 'trips' async storage to render as a horizontal flat list.
     loadData = async() => {
         const viagensStorage = await AsyncStorage.getItem('trips');
-        console.log('[ViagemScreen] viagensStorage (ANTES): ', viagensStorage);
-        console.log('[ViagemScreen] viagensStorage.length (ANTES): ', viagensStorage.length);
 
         let viagens = [];
         if (viagensStorage) {
@@ -30,8 +28,7 @@ class ViagemScreen extends Component {
         }
 
         this.setState({ viagens: viagens });
-        console.log('[ViagemScreen] state.viagens (DEPOIS): ', this.state.viagens);
-        console.log('[ViagemScreen] state.viagens.length (DEPOIS): ', this.state.viagens.length);
+        console.log('[ViagemScreen] this.state.viagens: ', this.state.viagens);
     }
 
     renderItem = viagem => {
@@ -44,18 +41,6 @@ class ViagemScreen extends Component {
         }} title={ viagem.item.viagem } price={ viagem.item.price }
         />
     }
-    /*
-    renderItem = viagem => {
-        // console.log('viagem: ', viagem);
-        return <Viagem onPress={() => this.props.navigation.navigate('DespesaScreen', {
-            viagem: viagem.item
-        })}
-            title={ viagem.item.viagem }
-            thumbnail={ viagem.item.thumbnail }
-            price={ viagem.item.price }
-        />
-    }
-    */
 
     render() {
         const { viagens } = this.state;
