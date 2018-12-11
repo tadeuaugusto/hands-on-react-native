@@ -55,7 +55,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#e5e5e5',
         padding: 20,
         marginBottom: 16
+    },
+    /*
+    input: {
+        backgroundColor: '#e5e5e5',
+        padding: 20,
+        marginBottom: 16
     }
+    */
 })
 
 export default styles

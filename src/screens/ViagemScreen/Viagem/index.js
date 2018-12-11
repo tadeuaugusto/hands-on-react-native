@@ -11,7 +11,7 @@ const Viagem = props => {
             <Image source={{ uri: props.thumbnail }} style={ [ styles.imageTrip, { width: dim.width - 32 } ] }/>
 
             <Text>{ props.title }</Text>
-            <Text style={ styles.ticketsButton }>props</Text>
+            <Text style={ styles.ticketsButton }>R$ { props.price.toFixed(2) }</Text>
         </TouchableOpacity>
     )
 }

@@ -10,6 +10,7 @@ class CadastrarDespesa extends Component {
     }
 
     state = {
+        id: new Date().getTime(),
         position: {
             latitude: 37.78825,
             longitude: -122.4324
@@ -39,7 +40,7 @@ class CadastrarDespesa extends Component {
     handleSave = async() => {
 
         // recebe o id da viagem
-        const id = '1544475667662'; // this.props.navigation.state.params.id;
+        const id = this.props.navigation.state.params.id; // '1544475667662';
         console.log('[CadastrarDespesa] id viagem: ', id);
 
         // recuperar as despesas salva para a viagem no async storage
@@ -76,7 +77,7 @@ class CadastrarDespesa extends Component {
 
         // atualiza o valor total (id)
         viagens.forEach((trip, index) => {
-            if (viagens.id === id) {
+            if (trip.id === id) {
                 viagens[index].price = total;
                 viagens[index].latitude = despesas[0].position.latitude;
                 viagens[index].longitude = despesas[0].position.longitude;
@@ -86,6 +87,10 @@ class CadastrarDespesa extends Component {
         // salva as viagens no async storage
         await AsyncStorage.setItem('trips', JSON.stringify(viagens));
         console.log('[CadastrarDespesa] viagens (DEPOIS): ', viagens);
+
+
+        this.props.navigation.state.params.refresh();
+        this.props.navigation.goBack();
     }
 
     render() {

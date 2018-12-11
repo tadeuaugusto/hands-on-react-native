@@ -35,12 +35,27 @@ class ViagemScreen extends Component {
     }
 
     renderItem = viagem => {
+        return <Viagem onPress={() => {
+            this.props.navigation.navigate('DespesaScreen', {
+            // viagem: viagem.item
+            id: viagem.item.id,
+            refresh: this.loadData
+        })
+        }} title={ viagem.item.viagem } price={ viagem.item.price }
+        />
+    }
+    /*
+    renderItem = viagem => {
         // console.log('viagem: ', viagem);
         return <Viagem onPress={() => this.props.navigation.navigate('DespesaScreen', {
             viagem: viagem.item
-        })} title={ viagem.item.viagem } thumbnail={ viagem.item.thumbnail }
+        })}
+            title={ viagem.item.viagem }
+            thumbnail={ viagem.item.thumbnail }
+            price={ viagem.item.price }
         />
     }
+    */
 
     render() {
         const { viagens } = this.state;
